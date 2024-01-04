@@ -2,37 +2,37 @@ package models
 
 import (
 	"encoding/base64"
-	
 	"fmt"
-	
-	"poynt/database"
-	
-	
+	"github.com/google/uuid"
+	"os"
 )
 
-type Image struct {
-	ID   uint   `gorm:"primary_key" json:"id"`
+type ImageRequest struct {
 	Data string `json:"data"`
+}
+
+type Image struct {
+	ID       uint   `gorm:"primary_key" json:"id"`
+	Data     string `json:"data"`
 	ByteData []byte `json:"data"`
 	ImageUrl string `json:"imageUrl"`
 }
 
-func (image *Image) Save() (*Image, error) {
-	fmt.Println("received image", image.Data)
+func (image *Image) Save() (string, error) {
 	decodedData, err := base64.StdEncoding.DecodeString(image.Data)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	newImage := Image{
-		ByteData: decodedData,
+	uniqueFileName := uuid.New().String() + ".png"
+
+	filePath := "image/" + uniqueFileName
+
+	if err := os.WriteFile("./"+filePath, decodedData, 0644); err != nil {
+		fmt.Println("Error writing to file:", err)
+		return "", err
 	}
 
-	database.Database.Create(&newImage)
-	
-	return image, nil
-	
+	return filePath, nil
+
 }
-
-
-
