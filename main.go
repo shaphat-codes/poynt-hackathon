@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"os"
+	"path/filepath"
 	"poynt/controllers"
 )
 
@@ -13,7 +14,9 @@ func main() {
 }
 
 func SetUpImagesDirectory() {
-	dirname := "./images"
+	path := "images"
+
+	dirname := filepath.Join(".", path)
 
 	_, err := os.Stat(dirname)
 	if os.IsNotExist(err) {

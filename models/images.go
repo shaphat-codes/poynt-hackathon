@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"os"
+	"path/filepath"
 )
 
 type ImageRequest struct {
@@ -26,13 +27,14 @@ func (image *Image) Save() (string, error) {
 
 	uniqueFileName := uuid.New().String() + ".png"
 
-	filePath := "image/" + uniqueFileName
+	// Use filepath.Join for constructing file paths
+	dirName := "images"
+	filePath := filepath.Join(dirName, uniqueFileName)
 
-	if err := os.WriteFile("./"+filePath, decodedData, 0644); err != nil {
+	if err := os.WriteFile(filePath, decodedData, 0644); err != nil {
 		fmt.Println("Error writing to file:", err)
 		return "", err
 	}
 
 	return filePath, nil
-
 }

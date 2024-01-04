@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -31,8 +30,6 @@ func AddImage(context *gin.Context) {
 
 func ServeImage(context *gin.Context) {
 	path := context.Param("path")
-
-	fmt.Println(path)
 
 	_, err := os.Stat("." + path)
 	if os.IsNotExist(err) {
